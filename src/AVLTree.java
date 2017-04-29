@@ -3,7 +3,7 @@ import java.util.*;
 /**
  * Created by abdelrahman on 4/29/17.
  */
-public class AVLTree<E> extends BalancedTreeSet<E> {
+public class AVLTree<E> extends BalancedTreeSet<E>{
     Node<E> root = null;
     int size = 0;
 
@@ -54,12 +54,42 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
     }
 
     @Override
-    public int maxHeight() {
+    public int height() {
         return 0;
     }
 
     @Override
     public boolean isBalanced() {
         return false;
+    }
+
+    @Override
+    public Comparator<? super E> comparator() {
+        return null;
+    }
+
+    @Override
+    public SortedSet<E> subSet(E fromElement, E toElement) {
+        return null;
+    }
+
+    @Override
+    public SortedSet<E> headSet(E toElement) {
+        return null;
+    }
+
+    @Override
+    public SortedSet<E> tailSet(E fromElement) {
+        return null;
+    }
+
+    @Override
+    public E first() {
+        return null;
+    }
+
+    @Override
+    public E last() {
+        return null;
     }
 }

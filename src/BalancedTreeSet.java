@@ -1,15 +1,17 @@
 import java.util.AbstractCollection;
 import java.util.AbstractSet;
+import java.util.SortedSet;
 
 /**
  * Created by abdelrahman on 4/29/17.
  */
-public abstract class BalancedTreeSet<E> extends AbstractSet<E> {
-
+public abstract class BalancedTreeSet<E> extends AbstractSet<E> implements SortedSet<E> {
     /**
+     * mainly used for testing purposes
+     *
      * @return the current maximum height of the tree
      */
-    public abstract int maxHeight();
+    public abstract int height();
 
     /**
      * mainly used for testing purposes.
