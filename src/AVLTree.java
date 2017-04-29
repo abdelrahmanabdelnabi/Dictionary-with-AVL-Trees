@@ -3,7 +3,8 @@ import java.util.*;
 /**
  * Created by abdelrahman on 4/29/17.
  */
-public class AVLTree<E> extends BalancedTreeSet<E>{
+public class AVLTree<E extends Comparable> extends BalancedTreeSet<E> {
+
     Node<E> root = null;
     int size = 0;
 
@@ -12,6 +13,26 @@ public class AVLTree<E> extends BalancedTreeSet<E>{
     }
 
     // TODO: Implement the methods below
+
+    private Node<E> search(E key, Node<E> root) {
+        return null;
+    }
+
+    private boolean insert(E data, Node<E> root) {
+        return false;
+    }
+
+    private boolean delete(E data, Node<E> root) {
+        return false;
+    }
+
+    private E maximum(Node<E> root) {
+        return null;
+    }
+
+    private E minimum(Node<E> root) {
+        return null;
+    }
 
     @Override
     public boolean contains(Object o) {
