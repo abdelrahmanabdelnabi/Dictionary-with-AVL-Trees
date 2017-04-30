@@ -1,3 +1,5 @@
+import java.util.*;
+
 /**
  * Created by abdelrahman on 4/29/17.
  */
@@ -18,12 +20,14 @@ public class AVLTree<E extends Comparable> extends BalancedTreeSet<E> {
 
     private Node<E> insert(E data, Node<E> node) {
         if(node==null)
-            return new Node<E>(data, null, null);
+            return new Node<>(data, null, null);
 
-        if(data < node.getData())
-            node.setLeft(insert(node.getLeft(), data));
-        else if(data > node.getData())
-            node.setRight(insert(node.getRight(), data));
+        int compareResult=data.compareTo(node.getData());
+
+        if(compareResult < 0)
+            node.setLeft(insert(data, node.getLeft()));
+        else if(compareResult > 0)
+            node.setRight(insert(data, node.getRight()));
         else // Ignore duplicates
             return node;
 
@@ -31,18 +35,18 @@ public class AVLTree<E extends Comparable> extends BalancedTreeSet<E> {
 
         int balanceFactor=getBalanceFactor(node);
 
-        if(balanceFactor>1 && data < node.getLeft().getData())
+        if(balanceFactor>1 && data.compareTo(node.getLeft().getData()) < 0)
             return rotateRight(node);
 
-        if(balanceFactor<-1 && data > node.getRight().getData())
+        if(balanceFactor<-1 && data.compareTo(node.getRight().getData()) > 0)
             return rotateLeft(node);
 
-        if(balanceFactor > 1 && data >node.getLeft().getData()){
+        if(balanceFactor > 1 && data.compareTo(node.getLeft().getData()) > 0){
             node.setLeft(rotateLeft(node.getLeft()));
             return rotateRight(node);
         }
 
-        if(balanceFactor < -1 && data < node.getRight().getData()){
+        if(balanceFactor < -1 && data.compareTo(node.getRight().getData()) < 0){
             node.setRight(rotateRight(node.getRight()));
             return rotateLeft(node);
         }
