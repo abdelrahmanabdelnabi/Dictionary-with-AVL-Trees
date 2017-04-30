@@ -51,6 +51,8 @@ public class AVLTree<E extends Comparable> extends BalancedTreeSet<E> {
             return rotateLeft(node);
         }
 
+        return node;
+
     }
 
     private boolean delete(E data, Node<E> root) {
