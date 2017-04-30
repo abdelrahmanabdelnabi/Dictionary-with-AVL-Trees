@@ -1,11 +1,7 @@
 import java.util.Comparator;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.SortedSet;
-
-
-import java.util.*;
 
 /**
  * Created by abdelrahman on 4/29/17.
@@ -34,7 +30,7 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
         if(node==null)
             return new Node<>(data, null, null);
 
-        int compareResult=data.compareTo(node.getData());
+        int compareResult=myCompare(data, node.getData());
 
         if(compareResult < 0)
             node.setLeft(insert(data, node.getLeft()));
@@ -43,22 +39,22 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
         else // Ignore duplicates
             return node;
 
-        node.setHeight(max(root.getLeft().getHeight(), root.getRight().getHeight() +1);
+        node.setHeight(max(root.getLeft().getHeight(), root.getRight().getHeight()) +1);
 
         int balanceFactor=getBalanceFactor(node);
 
-        if(balanceFactor>1 && data.compareTo(node.getLeft().getData()) < 0)
+        if(balanceFactor>1 && myCompare(data, node.getLeft().getData()) < 0)
             return rotateRight(node);
 
-        if(balanceFactor<-1 && data.compareTo(node.getRight().getData()) > 0)
+        if(balanceFactor<-1 && myCompare(data, node.getRight().getData()) > 0)
             return rotateLeft(node);
 
-        if(balanceFactor > 1 && data.compareTo(node.getLeft().getData()) > 0){
+        if(balanceFactor > 1 && myCompare(data, node.getLeft().getData()) > 0){
             node.setLeft(rotateLeft(node.getLeft()));
             return rotateRight(node);
         }
 
-        if(balanceFactor < -1 && data.compareTo(node.getRight().getData()) < 0){
+        if(balanceFactor < -1 && myCompare(data, node.getRight().getData()) < 0){
             node.setRight(rotateRight(node.getRight()));
             return rotateLeft(node);
         }
