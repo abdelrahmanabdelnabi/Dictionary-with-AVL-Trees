@@ -5,16 +5,21 @@ import java.util.*;
  */
 public class AVLTree<E extends Comparable> extends BalancedTreeSet<E> {
 
-    Node<E> root = null;
-    int size = 0;
+    private Node<E> root = null;
+    private int size = 0;
+    private Comparator<? extends E> comparator;
 
     public AVLTree() {
 
     }
 
+    public AVLTree(Comparator<? extends E> c) {
+        this.comparator = c;
+    }
+
     // TODO: Implement the methods below
 
-    private Node<E> search(E key, Node<E> root) {
+    private Node<E> search(Object key, Node<E> root) {
         return null;
     }
 
@@ -22,7 +27,7 @@ public class AVLTree<E extends Comparable> extends BalancedTreeSet<E> {
         return false;
     }
 
-    private boolean delete(E data, Node<E> root) {
+    private boolean delete(Object data, Node<E> root) {
         return false;
     }
 
@@ -36,27 +41,31 @@ public class AVLTree<E extends Comparable> extends BalancedTreeSet<E> {
 
     @Override
     public boolean contains(Object o) {
-        return super.contains(o);
+        return search(o, root) != null;
     }
 
     @Override
     public boolean add(E e) {
-        return super.add(e);
+        return insert(e, root);
     }
 
     @Override
     public boolean remove(Object o) {
-        return super.remove(o);
+        return delete(o, root);
     }
 
     @Override
-    public boolean addAll(Collection<? extends E> c) {
-        return super.addAll(c);
-    }
+    public boolean addAll(Collection<? extends E> collection) {
+        boolean inserted = false;
+        for (E e : collection) {
+            if(e == null)
+                throw new NullPointerException("Null elements are not allowed");
 
-    @Override
-    public boolean removeAll(Collection<?> c) {
-        return super.removeAll(c);
+            if(add(e))
+                inserted = true;
+        }
+
+        return inserted;
     }
 
     @Override
@@ -67,11 +76,6 @@ public class AVLTree<E extends Comparable> extends BalancedTreeSet<E> {
     @Override
     public Iterator<E> iterator() {
         return null;
-    }
-
-    @Override
-    public int size() {
-        return 0;
     }
 
     @Override
@@ -105,12 +109,32 @@ public class AVLTree<E extends Comparable> extends BalancedTreeSet<E> {
     }
 
     @Override
+    public boolean removeAll(Collection<?> collection) {
+        boolean modified = false;
+        for(Object o : collection) {
+            if(o == null)
+                throw new NullPointerException("Null elements are not allowed");
+
+            if(search(o, root) != null) {
+                delete(o, root);
+                modified = true;
+            }
+        }
+        return modified;
+    }
+
+    @Override
+    public int size() {
+        return size;
+    }
+
+    @Override
     public E first() {
-        return null;
+        return minimum(root);
     }
 
     @Override
     public E last() {
-        return null;
+        return maximum(root);
     }
 }
