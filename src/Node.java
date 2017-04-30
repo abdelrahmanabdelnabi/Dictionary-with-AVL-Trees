@@ -7,6 +7,36 @@ class Node<E> {
     private Node<E> left;
     private Node<E> right;
 
+    public int getHeight() {
+        return height;
+    }
+
+    public void setData(E data) {
+        this.data = data;
+    }
+
+    public Node<E> getRight() {
+
+        return right;
+    }
+
+    public void setRight(Node<E> right) {
+        this.right = right;
+    }
+
+    public Node<E> getLeft() {
+
+        return left;
+    }
+
+    public void setLeft(Node<E> left) {
+        this.left = left;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     public Node(E data) {
         this.data = data;
         height = -1;

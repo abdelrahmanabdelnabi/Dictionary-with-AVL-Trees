@@ -1,19 +1,22 @@
-import java.util.*;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.SortedSet;
 
 /**
  * Created by abdelrahman on 4/29/17.
  */
-public class AVLTree<E extends Comparable> extends BalancedTreeSet<E> {
+public class AVLTree<E> extends BalancedTreeSet<E> {
 
     private Node<E> root = null;
     private int size = 0;
-    private Comparator<? extends E> comparator;
+    private Comparator<? super E> comparator;
 
     public AVLTree() {
 
     }
 
-    public AVLTree(Comparator<? extends E> c) {
+    public AVLTree(Comparator<? super E> c) {
         this.comparator = c;
     }
 
@@ -23,8 +26,47 @@ public class AVLTree<E extends Comparable> extends BalancedTreeSet<E> {
         return null;
     }
 
-    private boolean insert(E data, Node<E> root) {
-        return false;
+    private Node<E> insert(E data, Node<E> node) {
+        if(node==null)
+            return new Node<E>(data, null, null);
+
+        if(data < node.getData())
+            node.setLeft(insert(node.getLeft(), data));
+        else if(data > node.getData())
+            node.setRight(insert(node.getRight(), data));
+        else // Ignore duplicates
+            return node;
+
+        node.setHeight(max(root.getLeft().getHeight(), root.getRight().getHeight() +1);
+
+        int balanceFactor=getBalanceFactor(node);
+
+        if(balanceFactor>1 && data < node.getLeft().getData())
+            return rotateRight(node);
+
+        if(balanceFactor<-1 && data > node.getRight().getData())
+            return rotateLeft(node);
+
+        if(balanceFactor > 1 && data >node.getLeft().getData()){
+            node.setLeft(rotateLeft(node.getLeft()));
+            return rotateRight(node);
+        }
+
+        if(balanceFactor < -1 && data < node.getRight().getData()){
+            node.setRight(rotateRight(node.getRight()));
+            return rotateLeft(node);
+        }
+
+    }
+
+    private int myCompare(E first, E second) {
+        if(comparator != null)
+            return comparator.compare(first, second);
+
+        if(!(first instanceof Comparable && second instanceof Comparable))
+            throw new ClassCastException();
+
+        return ((Comparable)first).compareTo( second );
     }
 
     private boolean delete(Object data, Node<E> root) {
@@ -79,9 +121,56 @@ public class AVLTree<E extends Comparable> extends BalancedTreeSet<E> {
     }
 
     @Override
+
     public int height() {
         return 0;
     }
+
+
+    private int height(Node<E> node){
+        if(node==null)
+            return 0;
+        return node.getHeight();
+    }
+
+    int max(int x, int y){
+        return x>y? x:y;
+    }
+
+    public Node<E> rotateRight(Node<E> root){
+        Node<E> x=root.getLeft();
+        Node<E> y=x.getRight();
+
+        x.setRight(root);
+        root.setLeft(y);
+
+        root.setHeight(max(root.getLeft().getHeight(), root.getRight().getHeight()) + 1);
+        x.setHeight(max(x.getLeft().getHeight(), x.getRight().getHeight()) + 1);
+
+        return x;
+    }
+
+    public Node<E> rotateLeft(Node<E> root){
+        Node<E> x=root.getRight();
+        Node<E> y=x.getLeft();
+
+        x.setLeft(root);
+        root.setRight(y);
+
+        root.setHeight(max(root.getLeft().getHeight(), root.getRight().getHeight()));
+        x.setHeight(max(x.getLeft().getHeight(), x.getRight().getHeight()));
+
+        return x;
+    }
+
+    private int getBalanceFactor(Node<E> node){
+        if(node==null)
+            return 0;
+        return node.getLeft().getHeight() - node.getRight().getHeight();
+    }
+
+
+
 
     @Override
     public boolean isBalanced() {
