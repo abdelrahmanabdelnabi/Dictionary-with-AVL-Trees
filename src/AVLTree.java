@@ -48,33 +48,47 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
             else
                 node=doubleRotateRight(node);
 
-        node.setHeight( max(node.getLeft().getHeight(), node.getRight().getHeight()) + 1);
+        node.setHeight( max(node.getLeft().getHeight(),
+                node.getRight().getHeight()) + 1);
         return node;
 
     }
 
     private Node<E> rotateLeft(Node<E> k2){
         Node<E> k1=k2.getLeft();
+
         k2.setLeft(k1.getRight());
         k1.setRight(k2);
-        k2.setHeight(max(k2.getLeft().getHeight(), k2.getRight().getHeight()) + 1);
-        k1.setHeight(max(k1.getLeft().getHeight(), k2.getHeight()) + 1);
 
+        k2.setHeight(   max(k2.getLeft().getHeight(),
+                k2.getRight().getHeight()) + 1);
+        k1.setHeight(   max(k1.getLeft().getHeight(),
+                k2.getHeight()) + 1);
         return k1;
     }
 
-    private Node<E> rotateRight(Node<E> k2){
-        return null;
+    private Node<E> rotateRight(Node<E> k1){
+        Node<E> k2 = k1.getRight();
+
+        k1.setRight(k2.getLeft());
+        k2.setLeft(k1);
+
+        k1.setHeight( max(  k1.getLeft().getHeight() ,
+                k1.getRight().getHeight() ) +1 );
+
+        k2.setHeight( max( k2.getRight().getHeight() ,
+                k1.getHeight() ) +1);
+        return k2;
     }
 
     private Node<E> doubleRotateLeft(Node<E> k3){
         k3.setLeft(rotateRight(k3.getLeft()));
-
         return  rotateLeft(k3);
     }
 
-    private Node<E> doubleRotateRight(Node<E> k2){
-        return null;
+    private Node<E> doubleRotateRight(Node<E> k1){
+        k1.setRight(rotateLeft(k1.getRight()));
+        return rotateRight(k1);
     }
 
     private Node<E> insert(E data, Node<E> node) {
@@ -84,7 +98,6 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
         }
 
         int compareResult=myCompare(data, node.getData());
-        System.out.println("Hi= " + compareResult);
 
         if(compareResult < 0)
             node.setLeft(insert(data, node.getLeft()));
@@ -145,12 +158,32 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
         return false;
     }
 
-    private E maximum(Node<E> root) {
-        return null;
+    private E maximum(Node<E> node) {
+        if(node==null)
+            return node.getData();
+
+        while(node.getRight()!=null)
+            node=node.getRight();
+
+        return node.getData();
     }
 
-    private E minimum(Node<E> root) {
-        return null;
+//    private E minimum(Node<E> root) {
+//        return null;
+//    }
+
+    private E minimum(Node<E> node){
+        if(node==null)
+            return node.getData();
+
+        while(node.getLeft()!=null)
+            node=node.getLeft();
+
+        return node.getData();
+    }
+
+    private boolean isEmpty(Node<E> node){
+        return (node==null);
     }
 
     @Override
