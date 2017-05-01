@@ -39,6 +39,9 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
         if(node==null)
             return node;
 
+        System.out.println(node.getLeft().getHeight());
+        System.out.println(node.getRight().getHeight());
+
         if(node.getLeft().getHeight() - node.getRight().getHeight() > 1)
             if(node.getLeft().getLeft().getHeight() >= node.getLeft().getRight().getHeight())
                 node=rotateLeft(node);
@@ -85,6 +88,7 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
             return new Node<>(data, null, null);
 
         int compareResult=myCompare(data, node.getData());
+        System.out.println("Hi= " + compareResult);
 
         if(compareResult < 0)
             node.setLeft(insert(data, node.getLeft()));
@@ -297,7 +301,13 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
     }
 
     public static void main(String args[]){
-        AVLTree tree;
+        AVLTree tree=new AVLTree();
+
+        tree.setRoot(tree.insert(5, tree.root));
+        tree.setRoot(tree.insert(7, tree.root));
+
+        tree.displayTree(tree.root);
+
     }
 
 }
