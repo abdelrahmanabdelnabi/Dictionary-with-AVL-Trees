@@ -9,6 +9,15 @@ import java.util.SortedSet;
 public class AVLTree<E> extends BalancedTreeSet<E> {
 
     private Node<E> root = null;
+
+    public Node<E> getRoot() {
+        return root;
+    }
+
+    public void setRoot(Node<E> root) {
+        this.root = root;
+    }
+
     private int size = 0;
     private Comparator<? super E> comparator;
 
@@ -26,6 +35,51 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
         return null;
     }
 
+    private Node<E> balance(Node<E> node){
+        if(node==null)
+            return node;
+
+        if(node.getLeft().getHeight() - node.getRight().getHeight() > 1)
+            if(node.getLeft().getLeft().getHeight() >= node.getLeft().getRight().getHeight())
+                node=rotateLeft(node);
+            else
+                node=doubleRotateLeft(node);
+        else
+        if(node.getRight().getHeight() - node.getLeft().getHeight() > 1)
+            if(node.getRight().getRight().getHeight() >= node.getRight().getLeft().getHeight())
+                node=rotateRight(node);
+            else
+                node=doubleRotateRight(node);
+
+        node.setHeight( max(node.getLeft().getHeight(), node.getRight().getHeight()) + 1);
+        return node;
+
+    }
+
+    private Node<E> rotateLeft(Node<E> k2){
+        Node<E> k1=k2.getLeft();
+        k2.setLeft(k1.getRight());
+        k1.setRight(k2);
+        k2.setHeight(max(k2.getLeft().getHeight(), k2.getRight().getHeight()) + 1);
+        k1.setHeight(max(k1.getLeft().getHeight(), k2.getHeight()) + 1);
+
+        return k1;
+    }
+
+    private Node<E> rotateRight(Node<E> k2){
+        return null;
+    }
+
+    private Node<E> doubleRotateLeft(Node<E> k3){
+        k3.setLeft(rotateRight(k3.getLeft()));
+
+        return  rotateLeft(k3);
+    }
+
+    private Node<E> doubleRotateRight(Node<E> k2){
+        return null;
+    }
+
     private Node<E> insert(E data, Node<E> node) {
         if(node==null)
             return new Node<>(data, null, null);
@@ -37,30 +91,44 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
         else if(compareResult > 0)
             node.setRight(insert(data, node.getRight()));
         else // Ignore duplicates
-            return node;
+            ;
 
-        node.setHeight(max(root.getLeft().getHeight(), root.getRight().getHeight()) +1);
+        return balance(node);
+//
+//        node.setHeight(max(root.getLeft().getHeight(), root.getRight().getHeight()) +1);
+//
+//        int balanceFactor=getBalanceFactor(node);
+//
+//        // Left Left Case
+//        if(balanceFactor>1 && myCompare(data, node.getLeft().getData()) < 0)
+//            return rotateRight(node);
+//
+//        // Right Right Case
+//        if(balanceFactor<-1 && myCompare(data, node.getRight().getData()) > 0)
+//            return rotateLeft(node);
+//
+//        // Left Right Case
+//        if(balanceFactor > 1 && myCompare(data, node.getLeft().getData()) > 0){
+//            node.setLeft(rotateLeft(node.getLeft()));
+//            return rotateRight(node);
+//        }
+//
+//        // Right Left Case
+//        if(balanceFactor < -1 && myCompare(data, node.getRight().getData()) < 0){
+//            node.setRight(rotateRight(node.getRight()));
+//            return rotateLeft(node);
+//        }
+//
+//        return node;
 
-        int balanceFactor=getBalanceFactor(node);
+    }
 
-        if(balanceFactor>1 && myCompare(data, node.getLeft().getData()) < 0)
-            return rotateRight(node);
-
-        if(balanceFactor<-1 && myCompare(data, node.getRight().getData()) > 0)
-            return rotateLeft(node);
-
-        if(balanceFactor > 1 && myCompare(data, node.getLeft().getData()) > 0){
-            node.setLeft(rotateLeft(node.getLeft()));
-            return rotateRight(node);
+    private void displayTree(Node<E> node){
+        if(node!=null){
+            System.out.println(node.getData() + " ");
+            displayTree(node.getLeft());
+            displayTree(node.getRight());
         }
-
-        if(balanceFactor < -1 && myCompare(data, node.getRight().getData()) < 0){
-            node.setRight(rotateRight(node.getRight()));
-            return rotateLeft(node);
-        }
-
-        return node;
-
     }
 
     private int myCompare(E first, E second) {
@@ -90,10 +158,10 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
         return search(o, root) != null;
     }
 
-    @Override
-    public boolean add(E e) {
-        return insert(e, root);
-    }
+//    @Override
+//    public boolean add(E e) {
+//        return insert(e, root);
+//    }
 
     @Override
     public boolean remove(Object o) {
@@ -140,41 +208,38 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
     int max(int x, int y){
         return x>y? x:y;
     }
-
-    public Node<E> rotateRight(Node<E> root){
-        Node<E> x=root.getLeft();
-        Node<E> y=x.getRight();
-
-        x.setRight(root);
-        root.setLeft(y);
-
-        root.setHeight(max(root.getLeft().getHeight(), root.getRight().getHeight()) + 1);
-        x.setHeight(max(x.getLeft().getHeight(), x.getRight().getHeight()) + 1);
-
-        return x;
-    }
-
-    public Node<E> rotateLeft(Node<E> root){
-        Node<E> x=root.getRight();
-        Node<E> y=x.getLeft();
-
-        x.setLeft(root);
-        root.setRight(y);
-
-        root.setHeight(max(root.getLeft().getHeight(), root.getRight().getHeight()));
-        x.setHeight(max(x.getLeft().getHeight(), x.getRight().getHeight()));
-
-        return x;
-    }
+//
+//    public Node<E> rotateRight(Node<E> root){
+//        Node<E> x=root.getLeft();
+//        Node<E> y=x.getRight();
+//
+//        x.setRight(root);
+//        root.setLeft(y);
+//
+//        root.setHeight(max(root.getLeft().getHeight(), root.getRight().getHeight()) + 1);
+//        x.setHeight(max(x.getLeft().getHeight(), x.getRight().getHeight()) + 1);
+//
+//        return x;
+//    }
+//
+//    public Node<E> rotateLeft(Node<E> root){
+//        Node<E> x=root.getRight();
+//        Node<E> y=x.getLeft();
+//
+//        x.setLeft(root);
+//        root.setRight(y);
+//
+//        root.setHeight(max(root.getLeft().getHeight(), root.getRight().getHeight()));
+//        x.setHeight(max(x.getLeft().getHeight(), x.getRight().getHeight()));
+//
+//        return x;
+//    }
 
     private int getBalanceFactor(Node<E> node){
         if(node==null)
             return 0;
         return node.getLeft().getHeight() - node.getRight().getHeight();
     }
-
-
-
 
     @Override
     public boolean isBalanced() {
@@ -230,4 +295,9 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
     public E last() {
         return maximum(root);
     }
+
+    public static void main(String args[]){
+        AVLTree tree;
+    }
+
 }
