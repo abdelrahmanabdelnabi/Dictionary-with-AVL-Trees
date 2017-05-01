@@ -1,3 +1,5 @@
+import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+
 import java.util.Comparator;
 import java.util.Collection;
 import java.util.Iterator;
@@ -9,14 +11,6 @@ import java.util.SortedSet;
 public class AVLTree<E> extends BalancedTreeSet<E> {
 
     private Node<E> root = null;
-
-    public Node<E> getRoot() {
-        return root;
-    }
-
-    public void setRoot(Node<E> root) {
-        this.root = root;
-    }
 
     private int size = 0;
     private Comparator<? super E> comparator;
@@ -84,8 +78,10 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
     }
 
     private Node<E> insert(E data, Node<E> node) {
-        if(node==null)
+        if(node==null){
+            size++;
             return new Node<>(data, null, null);
+        }
 
         int compareResult=myCompare(data, node.getData());
         System.out.println("Hi= " + compareResult);
@@ -98,7 +94,7 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
             ;
 
         return balance(node);
-//
+
 //        node.setHeight(max(root.getLeft().getHeight(), root.getRight().getHeight()) +1);
 //
 //        int balanceFactor=getBalanceFactor(node);
@@ -162,10 +158,14 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
         return search(o, root) != null;
     }
 
-//    @Override
-//    public boolean add(E e) {
-//        return insert(e, root);
-//    }
+    @Override
+    public boolean add(E e) {
+        if(root == null) {
+            root = insert(e, root);
+            return root != null;
+        }
+        return insert(e, root) != null;
+    }
 
     @Override
     public boolean remove(Object o) {
@@ -301,10 +301,13 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
     }
 
     public static void main(String args[]){
-        AVLTree tree=new AVLTree();
+        AVLTree<Integer> tree =new AVLTree<>();
 
-        tree.setRoot(tree.insert(5, tree.root));
-        tree.setRoot(tree.insert(7, tree.root));
+        tree.add(5);
+        tree.add(7);
+
+        System.out.println(tree.contains(5) + " " + tree.contains(7));
+
 
         tree.displayTree(tree.root);
 
