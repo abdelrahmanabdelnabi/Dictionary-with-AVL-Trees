@@ -53,8 +53,8 @@ public class AVLTree<E extends Comparable<E>> extends BalancedTreeSet<E> {
         k2.left = k1.right;
         k1.right = k2;
 
-        k2.height = max(k2.left.height, k2.right.height) + 1;
-        k1.height= max(k1.left.height, k2.height) + 1;
+        k2.height = max(height(k2.left), height(k2.right)) + 1;
+        k1.height= max(height(k1.left), height(k2)) + 1;
         return k1;
     }
 
@@ -98,6 +98,9 @@ public class AVLTree<E extends Comparable<E>> extends BalancedTreeSet<E> {
 
         return balance(node);
 
+    }
+    public void showTree() {
+        displayTree(root);
     }
 
     private void displayTree(Node<E> node) {
@@ -147,11 +150,8 @@ public class AVLTree<E extends Comparable<E>> extends BalancedTreeSet<E> {
 
     @Override
     public boolean add(E e) {
-        if (root == null) {
-            root = insert(e, root);
-            return root != null;
-        }
-        return insert(e, root) != null;
+        root = insert(e, root);
+        return root != null;
     }
 
     @Override
