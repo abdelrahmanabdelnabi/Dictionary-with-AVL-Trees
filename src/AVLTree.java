@@ -1,3 +1,5 @@
+import java.util.*;
+
 /**
  * Created by abdelrahman on 4/29/17.
  */
@@ -132,14 +134,14 @@ public class AVLTree<E extends Comparable<E>> extends BalancedTreeSet<E> {
         return node.getData();
     }
 
-    private Node<E> minimum(Node<E> node) {
+    private E minimum(Node<E> node) {
         if (node == null)
-            return node;
+            return node.getData();
 
         while (node.left != null)
             node = node.left;
 
-        return node;
+        return node.getData();
     }
 
     private boolean isEmpty(Node<E> node) {
@@ -152,30 +154,9 @@ public class AVLTree<E extends Comparable<E>> extends BalancedTreeSet<E> {
         return root != null;
     }
 
-    public boolean delete(E e) {
-        root = remove(e, root);
-        return root != null;
-    }
-
-    public Node<E> remove(E key, Node<E> node){
-        if(node==null)
-            return node;
-
-        int compareResult=myCompare(key, node.data);
-
-        if(compareResult < 0)
-            node.left=remove(key, node.left);
-        else if(compareResult >0)
-            node.right=remove(key, node.right);
-        else if(node.left != null && node.right !=null){
-            node.data=minimum(node.right).data;
-            node.right=remove(node.data, node.right);
-        }
-        else
-            node= (node.left != null) ? node.left : node.right;
-
-        //size--;
-        return  balance(node);
+    @Override
+    public boolean remove(Object o) {
+        return delete(o, root);
     }
 
     @Override
@@ -309,7 +290,7 @@ public class AVLTree<E extends Comparable<E>> extends BalancedTreeSet<E> {
 
     @Override
     public E first() {
-        return minimum(root).data;
+        return minimum(root);
     }
 
     @Override

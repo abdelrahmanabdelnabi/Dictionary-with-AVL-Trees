@@ -17,45 +17,6 @@ public class Main {
 
         System.out.println(tree.contains(5) + " " + tree.contains(4) + " " + tree.contains(3) +
                 " " + tree.contains(2));
-        tree.showTree();
-
-        System.out.println("=");
-
-        tree.delete(5);
-        tree.showTree();
-        System.out.println("=");
-
-        tree.delete(1);
-        tree.showTree();
-        System.out.println("=");
-
-        tree.delete(6);
-        tree.showTree();
-        System.out.println("=");
-
-        tree.delete(2);
-        tree.showTree();
-        System.out.println("=");
-
-        tree.delete(10);
-        tree.showTree();
-        System.out.println("=");
-
-        tree.delete(8);
-        tree.showTree();
-        System.out.println("=");
-
-        tree.add(10);
-        tree.showTree();
-        System.out.println("=");
-
-        tree.delete(10);
-        tree.showTree();
-        System.out.println("=");
-
-        tree.delete(10);
-        tree.showTree();
-        System.out.println("=");
 
         tree.showTree();
         System.out.println(tree.size());
