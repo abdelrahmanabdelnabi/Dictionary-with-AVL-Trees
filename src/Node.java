@@ -2,7 +2,7 @@
  * Created by abdelrahman on 4/29/17.
  */
 class Node<E> {
-    private E data;
+    E data;
     int height;
     Node<E> left;
     Node<E> right;

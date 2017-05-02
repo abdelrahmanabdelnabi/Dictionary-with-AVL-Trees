@@ -1,12 +1,7 @@
-import java.util.Comparator;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.SortedSet;
-
 /**
  * Created by abdelrahman on 4/29/17.
  */
-public class AVLTree<E> extends BalancedTreeSet<E> {
+public class AVLTree<E extends Comparable<E>> extends BalancedTreeSet<E> {
 
     private Node<E> root = null;
 
@@ -22,10 +17,6 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
     }
 
     // TODO: Implement the methods below
-
-    private Node<E> search(Object key, Node<E> root) {
-        return null;
-    }
 
     private Node<E> balance(Node<E> node) {
         if (node == null)
@@ -54,17 +45,17 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
         return t == null ? -1 : t.height;
     }
 
-
     private Node<E> rotateLeft(Node<E> k2) {
         Node<E> k1 = k2.left;
 
         k2.left = k1.right;
         k1.right = k2;
 
-        k2.height = max(k2.left.height, k2.right.height) + 1;
-        k1.height= max(k1.left.height, k2.height) + 1;
+        k2.height = max(height(k2.left), height(k2.right)) + 1;
+        k1.height= max(height(k1.left), height(k2)) + 1;
         return k1;
     }
+
 
     private Node<E> rotateRight(Node<E> k1) {
         Node<E> k2 = k1.right;
@@ -106,6 +97,9 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
         return balance(node);
 
     }
+    public void showTree() {
+        displayTree(root);
+    }
 
     private void displayTree(Node<E> node) {
         if (node == null)
@@ -121,10 +115,7 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
         if (comparator != null)
             return comparator.compare(first, second);
 
-        if (!(first instanceof Comparable && second instanceof Comparable))
-            throw new ClassCastException();
-
-        return ((Comparable) first).compareTo(second);
+        return first.compareTo(second);
     }
 
     private boolean delete(Object data, Node<E> root) {
@@ -141,14 +132,14 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
         return node.getData();
     }
 
-    private E minimum(Node<E> node) {
+    private Node<E> minimum(Node<E> node) {
         if (node == null)
-            return node.getData();
+            return node;
 
         while (node.left != null)
             node = node.left;
 
-        return node.getData();
+        return node;
     }
 
     private boolean isEmpty(Node<E> node) {
@@ -156,22 +147,35 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
     }
 
     @Override
-    public boolean contains(Object o) {
-        return search(o, root) != null;
-    }
-
-    @Override
     public boolean add(E e) {
-        if (root == null) {
-            root = insert(e, root);
-            return root != null;
-        }
-        return insert(e, root) != null;
+        root = insert(e, root);
+        return root != null;
     }
 
-    @Override
-    public boolean remove(Object o) {
-        return delete(o, root);
+    public boolean delete(E e) {
+        root = remove(e, root);
+        return root != null;
+    }
+
+    public Node<E> remove(E key, Node<E> node){
+        if(node==null)
+            return node;
+
+        int compareResult=myCompare(key, node.data);
+
+        if(compareResult < 0)
+            node.left=remove(key, node.left);
+        else if(compareResult >0)
+            node.right=remove(key, node.right);
+        else if(node.left != null && node.right !=null){
+            node.data=minimum(node.right).data;
+            node.right=remove(node.data, node.right);
+        }
+        else
+            node= (node.left != null) ? node.left : node.right;
+
+        //size--;
+        return  balance(node);
     }
 
     @Override
@@ -201,6 +205,51 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
     @Override
     public int height() {
         return 0;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        return search(o, this.root) != null;
+    }
+
+    private Node<E> search(Object key, Node<E> root) {
+        if (comparator != null)
+            return searchWithComparator(key);
+        if (key == null)
+            throw new NullPointerException();
+
+        @SuppressWarnings("unchecked")
+        Comparable<? super E> k = (Comparable<? super E>) key;
+        Node<E> p = root;
+        while (p != null) {
+            int cmp = k.compareTo(p.getData());
+            if (cmp < 0)
+                p = p.left;
+            else if (cmp > 0)
+                p = p.right;
+            else
+                return p;
+        }
+        return null;
+    }
+
+    private Node<E> searchWithComparator(Object key) {
+        @SuppressWarnings("unchecked")
+        E k = (E) key;
+        Comparator<? super E> cpr = comparator;
+        if (cpr != null) {
+            Node<E> p = root;
+            while (p != null) {
+                int cmp = cpr.compare(k, p.getData());
+                if (cmp < 0)
+                    p = p.left;
+                else if (cmp > 0)
+                    p = p.right;
+                else
+                    return p;
+            }
+        }
+        return null;
     }
 
     private int max(int x, int y) {
@@ -260,7 +309,7 @@ public class AVLTree<E> extends BalancedTreeSet<E> {
 
     @Override
     public E first() {
-        return minimum(root);
+        return minimum(root).data;
     }
 
     @Override
