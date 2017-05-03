@@ -78,6 +78,7 @@ public class Main {
         word=scanner.next();
         System.out.println("Searching for " + "\"" + word + "\"" + " " + dictionary.contains(word));
 
+        System.out.println("Tree Height: " + dictionary.getHeight());
 
     }
 }
