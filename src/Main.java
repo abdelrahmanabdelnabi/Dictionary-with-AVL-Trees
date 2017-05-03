@@ -1,9 +1,21 @@
+import java.util.ArrayList;
+
 /**
  * Created by abdelrahman on 5/1/17.
  */
 public class Main {
     public static void main(String[] args) {
         AVLTree<Integer> tree = new AVLTree<Integer>();
+
+        ArrayList<Integer> numbers = new ArrayList<>();
+        numbers.add(5);
+        numbers.add(4);
+        numbers.add(6);
+
+        tree.addAll(numbers);
+        tree.removeAll(numbers);
+
+        tree.contains(6);
 
         tree.add(5);
         tree.add(4);
@@ -19,43 +31,32 @@ public class Main {
                 " " + tree.contains(2));
         tree.showTree();
 
-        System.out.println("=");
-
-        tree.delete(5);
+        tree.remove(5);
         tree.showTree();
-        System.out.println("=");
 
-        tree.delete(1);
+        tree.remove(1);
         tree.showTree();
-        System.out.println("=");
 
-        tree.delete(6);
+        tree.remove(6);
         tree.showTree();
-        System.out.println("=");
 
-        tree.delete(2);
+        tree.remove(2);
         tree.showTree();
-        System.out.println("=");
 
-        tree.delete(10);
+        tree.remove(10);
         tree.showTree();
-        System.out.println("=");
 
-        tree.delete(8);
+        tree.remove(8);
         tree.showTree();
-        System.out.println("=");
 
         tree.add(10);
         tree.showTree();
-        System.out.println("=");
 
-        tree.delete(10);
+        tree.remove(10);
         tree.showTree();
-        System.out.println("=");
 
-        tree.delete(10);
+        tree.remove(10);
         tree.showTree();
-        System.out.println("=");
 
         tree.showTree();
         System.out.println(tree.size());
