@@ -1,64 +1,28 @@
-import java.util.ArrayList;
+import java.io.*;
 
 /**
  * Created by abdelrahman on 5/1/17.
  */
 public class Main {
-    public static void main(String[] args) {
-        AVLTree<Integer> tree = new AVLTree<Integer>();
+    public static void main(String[] args) throws FileNotFoundException {
+        AVLTree<String> dictionary = new AVLTree<>();
 
-        ArrayList<Integer> numbers = new ArrayList<>();
-        numbers.add(5);
-        numbers.add(4);
-        numbers.add(6);
+        File file = new File(System.getProperty("user.dir") + "/src/large.txt");
 
-        tree.addAll(numbers);
-        tree.removeAll(numbers);
+        long startTime = System.currentTimeMillis();
+        try(BufferedReader br = new BufferedReader(new FileReader(file))) {
+            for(String line; (line = br.readLine()) != null; ) {
+                // process the line.
+                dictionary.add(line);
+            }
+        } catch (IOException e) {
+            System.out.println("Can not read dictionary file");
+            System.out.println(e.getMessage());
+        }
 
-        tree.contains(6);
-
-        tree.add(5);
-        tree.add(4);
-        tree.add(3);
-        tree.add(2);
-        tree.add(6);
-        tree.add(8);
-        tree.add(10);
-        tree.add(6);
-        tree.add(1);
-
-        System.out.println(tree.contains(5) + " " + tree.contains(4) + " " + tree.contains(3) +
-                " " + tree.contains(2));
-        tree.showTree();
-
-        tree.remove(5);
-        tree.showTree();
-
-        tree.remove(1);
-        tree.showTree();
-
-        tree.remove(6);
-        tree.showTree();
-
-        tree.remove(2);
-        tree.showTree();
-
-        tree.remove(10);
-        tree.showTree();
-
-        tree.remove(8);
-        tree.showTree();
-
-        tree.add(10);
-        tree.showTree();
-
-        tree.remove(10);
-        tree.showTree();
-
-        tree.remove(10);
-        tree.showTree();
-
-        tree.showTree();
-        System.out.println(tree.size());
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        System.out.println("Reading and inserting time: " + elapsedTime + " ms");
+        System.out.println("Number of words inserted: " + dictionary.size());
     }
 }
