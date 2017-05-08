@@ -24,6 +24,6 @@ class Node<E> {
 
     @Override
     public String toString() {
-        return "Data: " + data.toString() + ",{ Left: " + left + ", Right: " + right + "}";
+        return data.toString();
     }
 }
