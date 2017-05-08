@@ -57,8 +57,11 @@ public class AVLTree<E extends Comparable<E>> extends BalancedTreeSet<E> {
 
             return sizeAfter != sizeBefore;
         }
-
         return false;
+    }
+
+    public int getHeight(){
+        return root!=null ? root.height+1 : 0;
     }
 
 
