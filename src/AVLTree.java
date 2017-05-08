@@ -21,6 +21,10 @@ public class AVLTree<E extends Comparable<E>> extends BalancedTreeSet<E> {
 
     }
 
+    public Node<E> getRoot() {
+        return root;
+    }
+
     public AVLTree(Comparator<? super E> c) {
         this.comparator = c;
     }
@@ -132,7 +136,7 @@ public class AVLTree<E extends Comparable<E>> extends BalancedTreeSet<E> {
 
     @Override
     public int height() {
-        return 0;
+        return root.height;
     }
 
     @Override
@@ -171,9 +175,9 @@ public class AVLTree<E extends Comparable<E>> extends BalancedTreeSet<E> {
         int compareResult = myCompare(key, node.data);
 
         if (compareResult < 0)
-            node.left = delete(key, node.left, false);
+            node.left = delete(key, node.left, found);
         else if (compareResult > 0)
-            node.right = delete(key, node.right, false);
+            node.right = delete(key, node.right, found);
         else {
             if(!found) // if the key has just been found
                 size--;
