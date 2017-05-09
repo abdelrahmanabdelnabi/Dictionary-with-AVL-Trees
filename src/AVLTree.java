@@ -139,7 +139,7 @@ public class AVLTree<E extends Comparable<E>> extends BalancedTreeSet<E> {
 
     @Override
     public int height() {
-        return root.height;
+        return height(root);
     }
 
     @Override
